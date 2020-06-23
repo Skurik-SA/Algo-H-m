@@ -1,0 +1,95 @@
+#include<vector>
+#include<algorithm>
+#include<cstdio>
+using namespace std;
+
+int tsize;
+vector<int> t1, t2, tmp2;
+vector<long long> tmp;
+vector<pair<long long, long long> > a;
+vector<pair<long long, int> > tmp3;
+vector<pair<int, int> > b;
+
+void inc(int x, int d, vector<int> &t)
+{
+  for(; x < tsize; x = (x|(x + 1)))
+    t[x] += d;
+}
+long long sum(int r, vector<int> &t)
+{
+  long long ans = 0;
+  for(; r >= 0; r = (r&(r + 1)) - 1)
+    ans += t[r];
+  return ans;
+}
+long long sum(int l, int r, vector<int> &t)
+{
+  return sum(r, t) - sum(l - 1, t);
+}
+
+int main()
+{
+  freopen("input.txt", "r", stdin);
+  freopen("output.txt", "w", stdout);
+  int n, m;
+
+  scanf("%d %d", &n, &m);
+  tmp.resize(m);
+  for(int i = 0; i < m; ++i)
+    scanf("%lld", &tmp[i]);
+  int k;
+  long long tsum;  
+  a.reserve(500000);
+  for(int i = 0; i < n; ++i)
+  {
+    tsum = 0;
+    scanf("%d", &k);
+    tmp2.resize(k);
+    for(int j = 0; j < k; ++j)
+      scanf("%d", &tmp2[j]), tsum += tmp[--tmp2[j]];
+    for(int j = 0; j < k; ++j)
+      a.push_back(make_pair(tmp[tmp2[j]], tsum - tmp[tmp2[j]]));  
+  }
+  sort(a.rbegin(), a.rend());   
+  tmp3.resize(a.size());
+  for(int i = 0; i < a.size(); ++i)
+    tmp3[i] = make_pair(a[i].second, i);
+  sort(tmp3.begin(), tmp3.end());     
+  b.resize(tmp3.size());
+  int id = 0;
+  long long lz = (tmp3.size() > 0 ? tmp3[0].first : 0);
+  for(int i = 0; i < tmp3.size(); ++i)
+  {
+    if(tmp3[i].first != lz)
+      id++, lz = tmp3[i].first;
+    b[tmp3[i].second] = make_pair(id, a[tmp3[i].second].first);
+  }
+  tsize = id + 1;
+  t1.resize(id + 1, 0), t2.resize(id + 1, 0);
+  vector<int> eq;
+  int last = -1;
+  long long ans = 0;
+  for(int i = 0; i < b.size(); ++i)
+  {
+    if(last != b[i].second)
+    {
+      for(int j = 0; j < eq.size(); ++j)
+        inc(eq[j], -1, t2);  
+      eq.clear();
+      last = b[i].second;
+      eq.push_back(b[i].first);
+      inc(eq[0], 1, t2);
+    }
+    else
+    {
+      eq.push_back(b[i].first);
+      inc(b[i].first, 1, t2);
+      ans -= sum(b[i].first + 1, id, t2);
+    }
+    ans += sum(b[i].first + 1, id, t1);
+    inc(b[i].first, 1, t1);
+  }                     
+  printf("%lld", ans);
+
+  return 0;
+}
