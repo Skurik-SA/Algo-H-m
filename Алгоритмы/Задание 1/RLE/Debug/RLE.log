@@ -1,0 +1,5 @@
+﻿  RLE.cpp
+C:\Users\MSI\source\repos\RLEG\RLE\RLE\RLE.cpp(40,22): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\MSI\source\repos\RLEG\RLE\RLE\RLE.cpp(56,22): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\MSI\source\repos\RLEG\RLE\RLE\RLE.cpp(89,22): warning C4018: <: несоответствие типов со знаком и без знака
+  RLE.vcxproj -> C:\Users\MSI\source\repos\RLEG\RLE\Debug\RLE.exe
